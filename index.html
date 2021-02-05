@@ -1,0 +1,213 @@
+
+<!--
+ Name: Saifullah
+ CMS: 208167
+ Class: BESE-8A
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		#image {
+		 height: 486px;
+		 width: 319px;
+		 background: url('https://i.imgur.com/J36L9Ow.png') 0px 0px;
+		 transform: scale(0.5,0.5);
+	 }
+	 .back{
+		position: fixed;
+		margin: 0;
+		height: 100%;
+		width: 100%;
+		background-image: url("https://i.imgur.com/zhJMHP1.jpg");
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+</style>
+</head>
+<body onload="docReady()" onkeydown="" onkeyup="">
+	<script type="text/javascript">
+	var tID; 
+	var position = 415;
+	var score = 0;
+	var jump = false;
+	var positionY = 0; 
+	const interval = 100;
+	const diff = 415; 
+	var left = 0;
+	var goingRight;
+	var y = 407; 
+	var y2 = 0;
+	 function leftArrowPressed() {
+		if (score > 0){
+			score = score - 1;
+		}
+		else{
+			score = 0;
+		}
+		goingRight = false;
+		var ele = document.getElementById("image");
+		ele.style.background = "url('https://i.imgur.com/TlzWtsG.png') 0px 0px"
+		ele.style.height = "507px";
+		ele.style.width = "415px";
+
+		if(left > 10){
+			left = left - 10;
+		}
+		else{
+			left = 10;
+		}
+		var elem = document.getElementById("image");
+		elem.style.transform = "rotateY(180deg) translateX(-"+left+"px) scale(0.5,0.5)";
+		elem.style.backgroundPosition =
+		`-${position}px -${positionY}px`;
+
+		if (position < 2075) {
+		 position = position + diff;
+	 }
+	 else if (positionY < 1014) {
+		 positionY = positionY + 507;
+		 position = 0;
+	 }
+	 else{
+		 position = 0;
+		 positionY = 0;
+	 }
+		
+	}
+	function rightArrowPressed() {
+		score = score + 1;
+		goingRight = true;
+	 var ele = document.getElementById("image");
+	 ele.style.background = "url('https://i.imgur.com/TlzWtsG.png') 0px 0px"
+	 ele.style.height = "507px";
+	 ele.style.width = "415px";
+
+	 if (left < 1200){
+		left = left + 10;
+	}
+	else{
+		left = 1200;
+	}
+	document.getElementById("image").style.transform = "rotateY(0deg) translateX("+left+"px) scale(0.5,0.5)";
+	document.getElementById("image").style.backgroundPosition =
+	`-${position}px -${positionY}px`;
+	if (position < 2075) {
+	 position = position + diff;
+ }
+ else if (positionY < 1014) {
+	 positionY = positionY + 507;
+	 position = 0;
+ }
+ else{
+	 position = 0;
+	 positionY = 0;
+ }
+}
+function upArrowPressed() {
+	score = score + 2;
+ jump = true;
+ var count = 0;
+ var isAtTop = false;
+ var top = 0;
+ var ele = document.getElementById("image");
+ ele.style.background = "url('https://i.imgur.com/snxVAZq.png')"
+ ele.style.height = "536px";
+ ele.style.width = "407px";
+		const interval = 100; //100 ms of interval for the setInterval()
+		const diff = 407; //diff as a variable for position offset
+		tID = setInterval(() => {
+				var elem = document.getElementById("image");
+				elem.style.backgroundPosition =`-${y}px -${y2}px`;
+				if (y < 2035) {
+				 y = y + diff;
+			 }
+			 else if (y2 < 1072 && y == 2035){
+				 y2 = y2 + 536;
+				 y = 0;
+			 }
+			 else {
+				 y = 407;
+				 y2 = 0;
+			 }
+			 if (top < 100  && !isAtTop){
+					top = top + 20;
+				}
+			else if (top == 100){
+					isAtTop = true;
+					top = top - 20;
+			}
+			else if (top > 0){
+				top = top - 20;
+			}
+			else{ 
+				top == 0;
+				isAtTop = false;
+				jump = false;
+				stopAnimate();
+				release();
+			}
+			if(goingRight){
+				elem.style.transform = "translateY(-"+top+"px) translateX("+left+"px) scale(0.5,0.5) rotateY(0deg)";
+			}
+			else{
+				elem.style.transform = "translateY(-"+top+"px) translateX("+left+"px) scale(0.5,0.5) rotateY(180deg)";
+			}
+		 }, interval); 
+	}
+
+	function stopAnimate() {
+		clearInterval(tID);
+	} //end of stopAnimate()
+
+	function moveSelection(evt) {
+		switch (evt.keyCode) {
+			case 37:
+			leftArrowPressed();
+			break;
+			case 39:
+			rightArrowPressed();
+			break;
+			case 38:
+			upArrowPressed();
+			break;
+		}
+		document.getElementById('score').innerText = score;
+	};
+
+
+	function release(evt) {
+	 if (!jump){
+		 var elem = document.getElementById("image");
+		 elem.style.background = "url('https://i.imgur.com/J36L9Ow.png') 0px 0px"
+		 elem.style.height = "486px";
+		 elem.style.width = "319px";
+		 position = 0;
+		 positionY = 0;
+	 }
+ };
+
+
+
+ function docReady()
+ {
+	window.addEventListener('keydown', moveSelection);
+	window.addEventListener('keyup', release);
+}
+
+
+</script>
+<div class="back">
+	<div id="image" style="position:absolute;left:0; top:410px;">
+	</div>
+	<h2 style="display:inline;">Score:</h2>
+		<h1 id = "score" style="display: inline;">0</h1>
+		<h2>Left: 1pts</h2>
+		<h2>Right: -1pts</h2>
+		<h2>Jump: 2pts</h2>
+</div>
+</body>
+</html>
